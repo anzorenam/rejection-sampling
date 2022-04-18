@@ -34,9 +34,7 @@ es=np.zeros(N)
 ktot=np.zeros(N)
 ebins=np.arange(0.8,1000.8,0.8)
 e=np.loadtxt('gamma-energy-spectrum.dat')
-home='/home/anzorena/alpaca/MC/test-MC'
-name='{0}/MD-waveform-build/out.txt'.format(home)
-eg=np.loadtxt(name)
+eg=np.loadtxt('sample-geant.txt')
 
 sel=e[:,1]!=0.0
 e0,e1=e[sel,0],e[sel,1]
