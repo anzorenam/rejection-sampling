@@ -28,12 +28,16 @@ def rejection(rng,par):
   return 10.0**(xrnd),j
 
 seed=100
-N=100000
+N=1000000
 rng=rnd.default_rng(seed)
 es=np.zeros(N)
 ktot=np.zeros(N)
 ebins=np.arange(0.8,1000.8,0.8)
 e=np.loadtxt('gamma-energy-spectrum.dat')
+home='/home/anzorena/alpaca/MC/test-MC'
+name='{0}/MD-waveform-build/out.txt'.format(home)
+eg=np.loadtxt(name)
+
 sel=e[:,1]!=0.0
 e0,e1=e[sel,0],e[sel,1]
 p,pcov=optim.curve_fit(poly,e0,np.log10(e1))
@@ -41,11 +45,15 @@ p,pcov=optim.curve_fit(poly,e0,np.log10(e1))
 for j in range(0,N):
   es[j],i=rejection(rng,p)
   ktot[j]=i
-print('{0:1.12f}'.format(p[0]))
 print(np.mean(ktot))
+
+a=np.arange(-0.5,3.0,0.01)
+fe=10.0**(p[0]*a*a+p[1]*a+p[2])
 fig,ax=plt.subplots(nrows=1,ncols=1,sharex=False,sharey=True)
 ax.plot(e0,e1,'o')
 ax.hist(es,bins=ebins,density=True)
+ax.hist(eg,bins=ebins,density=True,histtype='step')
+ax.plot(10.0**(a),fe,'o')
 ax.set_xscale('log')
 ax.set_yscale('log')
 plt.show()
